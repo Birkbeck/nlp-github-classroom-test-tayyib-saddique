@@ -1,4 +1,5 @@
 import nltk
+import re
 import spacy
 from pathlib import Path
 
@@ -19,7 +20,6 @@ def fk_level(text, d):
     Returns:
         float: The Flesch-Kincaid Grade Level of the text. (higher grade is more difficult)
     """
-    pass
 
 
 def count_syl(word, d):
@@ -51,8 +51,9 @@ def parse(df, store_path=Path.cwd() / "texts" / "novels" / "parsed", out_name="p
 
 def regex_ttr(text):
     """Calculates the type-token ratio of a text. Text is tokenized using a regular expression."""
-
-    pass
+    tokens = re.findall(r'\b\w+\b')
+    ttr = len(set(tokens)) / len(tokens)
+    return ttr
 
 
 def nltk_ttr(text):
