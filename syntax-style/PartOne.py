@@ -3,9 +3,14 @@ import re
 import spacy
 from pathlib import Path
 import pandas as pd
+from collections import Counter
+from nltk.corpus import cmudict
 
 nlp = spacy.load("en_core_web_sm")
 nlp.max_length = 2000000
+
+nltk.download('cmudict')
+d = cmudict.dict()
 
 def read_texts(path : str):
     """Checks file path is a directory and reads files in directory. If a file is a .txt file, the file is split and read.
@@ -38,7 +43,7 @@ def read_texts(path : str):
 
 path = Path.cwd()/"syntax-style/novels"
 df = read_texts(path)
-print(df.head())
+# print(df.head())
 
 def fk_level(text, d):
     """Returns the Flesch-Kincaid Grade Level of a text (higher grade is more difficult).
@@ -64,13 +69,38 @@ def count_syl(word, d):
     Returns:
         int: The number of syllables in the word.
     """
-    pass
-
+    pronunciations = d.get(word.lower(), [])
+    if pronunciations:
+        return max(len(i) for i in pronunciations)
+    else: 
+        syllables = re.findall(r'[aeiouy]+', word.lower())
+        return len(syllables)
+    
+# print(count_syl('Hello', d))
+# print(count_syl('Love', d))
 
 def read_novels(path=Path.cwd() / "texts" / "novels"):
     """Reads texts from a directory of .txt files and returns a DataFrame with the text, title,
     author, and year"""
-    pass
+    data = []
+    if not path.is_dir():
+        raise ValueError(f"{path} is not a directory.")
+    
+    for file in path.glob("*.txt"):
+        title, author, year = file.stem.split('-')
+        year = int(year) 
+
+        with open(file, 'r', encoding='utf-8') as f:
+            text = f.read()
+
+        data.append([text, title, author, year])
+
+    df = pd.DataFrame(data, columns=['text', 'title', 'author', 'year'])
+    df['year'] = df['year'].astype(int)
+    df = df.sort_values(by='year', ignore_index=True)
+    return df
+
+    
 
 
 def parse(df, store_path=Path.cwd() / "texts" / "novels" / "parsed", out_name="parsed.pickle"):
