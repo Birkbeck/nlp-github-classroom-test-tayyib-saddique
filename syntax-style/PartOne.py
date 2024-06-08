@@ -2,12 +2,43 @@ import nltk
 import re
 import spacy
 from pathlib import Path
-
+import pandas as pd
 
 nlp = spacy.load("en_core_web_sm")
 nlp.max_length = 2000000
 
+def read_texts(path : str):
+    """Checks file path is a directory and reads files in directory. If a file is a .txt file, the file is split and read.
+    A pandas DataFrame is created using text, title, author and year from each .txt file. 
+    Returns constructed pandas DataFrame.
 
+    Args:
+        path (str): directory containing .txt files
+
+    Returns:
+        df: constructed pandas DataFrame
+    """
+    data = []
+    if not path.is_dir():
+        raise ValueError(f"{path} is not a directory.")
+
+    for file in path.glob("*.txt"):
+        title, author, year = file.stem.split('-')
+        year = int(year) 
+
+        with open(file, 'r', encoding='utf-8') as f:
+            text = f.read()
+
+        data.append([text, title, author, year])
+
+    df = pd.DataFrame(data, columns=['text', 'title', 'author', 'year'])
+    df['year'] = df['year'].astype(int)
+    df = df.sort_values(by='year', ignore_index=True)
+    return df
+
+path = Path.cwd()/"syntax-style/novels"
+df = read_texts(path)
+print(df.head())
 
 def fk_level(text, d):
     """Returns the Flesch-Kincaid Grade Level of a text (higher grade is more difficult).
@@ -58,8 +89,9 @@ def regex_ttr(text):
 
 def nltk_ttr(text):
     """Calculates the type-token ratio of a text. Text is tokenized using nltk.word_tokenize."""
-
-    pass
+    tokens = nltk.word_tokenize(text)
+    ttr = len(set(tokens)) / len(tokens)
+    return ttr
 
 
 def get_ttrs(df):
