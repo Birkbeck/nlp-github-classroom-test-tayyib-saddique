@@ -82,7 +82,7 @@ def parse(df, store_path=Path.cwd() / "texts" / "novels" / "parsed", out_name="p
 
 def regex_ttr(text):
     """Calculates the type-token ratio of a text. Text is tokenized using a regular expression."""
-    tokens = re.findall(r'\b\w+\b')
+    tokens = re.findall(r'\b\w+\b', text)
     ttr = len(set(tokens)) / len(tokens)
     return ttr
 
