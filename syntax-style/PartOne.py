@@ -88,8 +88,9 @@ def regex_ttr(text):
 
 def nltk_ttr(text):
     """Calculates the type-token ratio of a text. Text is tokenized using nltk.word_tokenize."""
-
-    pass
+    tokens = nltk.word_tokenize(text)
+    ttr = len(set(tokens)) / len(tokens)
+    return ttr
 
 
 def get_ttrs(df):
