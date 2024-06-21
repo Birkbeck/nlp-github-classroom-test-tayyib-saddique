@@ -95,7 +95,15 @@ def fk_level(text, d):
 
 def parse(df, store_path=Path.cwd() / "syntax-style" / "novels" / "parsed", out_name="parsed.pickle"):
     """Parses the text of a DataFrame using spaCy, stores the parsed docs as a column and writes 
-    the resulting  DataFrame to a pickle file"""
+    the resulting  DataFrame to a pickle file
+    Args:
+        df (pandas DataFrame): dataFrame containing text data
+        store_path (str): directory containing .txt files
+        out_name (str): name of pickle file
+
+    Returns:
+        df: pandas DataFrame
+    """
     nlp = spacy.load("en_core_web_sm")
 
     store_path.mkdir(parents=True, exist_ok = True)
@@ -115,14 +123,25 @@ def parse(df, store_path=Path.cwd() / "syntax-style" / "novels" / "parsed", out_
 # print(parsed_df.info())
 
 def nltk_ttr(text):
-    """Calculates the type-token ratio of a text. Text is tokenized using nltk.word_tokenize."""
+    """Calculates the type-token ratio of a text. Text is tokenized using nltk.word_tokenize.
+    Args:
+        text (str): text to be analysed
+        
+    Returns:
+        ttr (float): type token ratio - measuring linguistic diversity"""
     tokens = nltk.word_tokenize(text)
     ttr = len(set(tokens)) / len(tokens)
     return ttr
 
 
 def get_ttrs(df):
-    """helper function to add ttr to a dataframe"""
+    """helper function to add ttr to a dataframe
+    Args:
+        df (pandas DataFrame): pandas dataFrame containing text data
+
+    Returns:
+        results (dict): dictionary containing title of text as key and type token ratio as value
+    """
     results = {}
     for i, row in df.iterrows():
         results[row["title"]] = nltk_ttr(row["text"])
@@ -130,7 +149,13 @@ def get_ttrs(df):
 
 
 def get_fks(df):
-    """helper function to add fk scores to a dataframe"""
+    """helper function to add fk scores to a dataframe
+    Args:
+        df (pandas DataFrame): pandas dataFrame containing text data
+
+    Returns:
+        results (dict): dictionary containing title of text as key and rounded fk_grade_level (Flesch-Kincaid score) as value
+    """
     results = {}
     cmudict = nltk.corpus.cmudict.dict()
     for i, row in df.iterrows():
@@ -139,7 +164,11 @@ def get_fks(df):
 
 
 def subjects_by_verb_pmi(doc, target_verb):
-    """Extracts the most common subjects of a given verb in a parsed document. Returns a list of tuples."""
+    """Extracts the most common subjects of a given verb in a parsed document. Returns a list of tuples.
+    Args:
+        doc (str): text data
+        target_verb (str): verb
+    """
     
     subjects = []
     verb_counts = Counter()
@@ -162,7 +191,11 @@ def subjects_by_verb_pmi(doc, target_verb):
 
 
 def subjects_by_verb_count(doc, verb):
-    """Extracts the most common subjects of a given verb in a parsed document. Returns a list of tuples."""
+    """Extracts the most common subjects of a given verb in a parsed document. Returns a list of tuples.
+    Args:
+        doc (str): text data
+        target_verb (str): verb
+    """
     subjects = []
 
     for sentence in doc.sents:
@@ -175,7 +208,10 @@ def subjects_by_verb_count(doc, verb):
 
 
 def subject_counts(doc):
-    """Extracts the most common subjects in a parsed document. Returns a list of tuples."""
+    """Extracts the most common subjects in a parsed document. Returns a list of tuples.
+    Args:
+        doc (str): text data
+    """
     subjects = []
 
     for sentence in doc.sents:
@@ -188,7 +224,12 @@ def subject_counts(doc):
 
 
 def get_subjects(df):
-    """Extracts the most common subjects from the parsed texts in the DataFrame. Returns dictionary"""
+    """Extracts the most common subjects from the parsed texts in the DataFrame. Returns dictionary
+    Args:
+        doc (str): text data    
+    Returns:
+        results (dict): dictionary containing title of text as key and list of tuples as value
+    """
     results = {}
     for i, row in df.iterrows():
         results[row["title"]] = subject_counts(row["parsed_text"])

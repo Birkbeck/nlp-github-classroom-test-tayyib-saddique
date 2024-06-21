@@ -3,9 +3,11 @@ Part One (part d)
 The Flesch Kincaid score may not always be a valid, robust or reliable estimator for text 4 difficulty.
 
 One such condition may include  cases where text contains non-standard vocabulary for example scientific journal articles or legalisation.
-These texts usually contain specialist technical jargon which may not be easily understood by a layman. They may also contain simpler syllable patterns or shorter sentences which influences the overall score. 
+These texts usually contain specialist technical jargon which may not be easily understood by a layman. 
+They may also contain simpler syllable patterns or shorter sentences which influences the overall score. 
 
-Another condition is when text may be difficult to read and understand due to comprehension difficulty. The score does not account for comprehension difficulty caused by factors such as metaphorical language, cultural references and abstract concepts. 
+Another condition is when text may be difficult to read and understand due to comprehension difficulty. 
+The score does not account for comprehension difficulty caused by factors such as metaphorical language, cultural references and abstract concepts. 
 For example poetry and literature such as Shakespeare often relies on implied meanings and metaphorical language, which is not captured by sentence structure or syllable count. 
 The readability formula does not measure this so therefore such texts may score low despite being quite difficult to read and understand.
 
@@ -13,13 +15,20 @@ The readability formula does not measure this so therefore such texts may score 
 -----
 Part Two (part f)
 
-The custom tokenizer converts all text into lowercase for consistency purposes to avoid differentiating words which are capitalised from those which are not e.g. 'The' and 'the'. A word_tokenizer is then applied to divide text into lists of substrings. This allows for words and punctuation to be identified within the string. 
-Once the string is divided into lists of substrings, the custom tokenizer uses regex to remove any punctuation and then uses wordnet from NLTK to remove any stopwords. Lemmatisation is then used to reduce a word into its root meaning for example the word better is reduced to good.
+The custom tokenizer converts all text into lowercase for consistency purposes to avoid differentiating words which are capitalised from those which are not e.g. 'The' and 'the'. 
+A word_tokenizer is then applied to divide text into lists of substrings. This allows for words and punctuation to be identified within the string. 
+Once the string is divided into lists of substrings, the custom tokenizer uses regex to remove any punctuation and then uses wordnet from NLTK to remove any stopwords. 
+Lemmatisation is then used to reduce a word into its root meaning for example the word better is reduced to good.
 
-A linear SVM model and ridge classifier both have an accuracy of 0.83 suggesting that both models can correctly predict outcomes. SVM has a greater macro average precision which suggests when predicting positive outcomes (true positives), there is a higher probability that the prediction is correct. 
-Ridge Classification has a marginally better recall which suggests that if there is a positive class, there is a marginally greater chance the model is correctly classify the positive class. It is worth noting that Ridge Classification shows better balanced performance across classes as it has greater macro-average F1 score at 0.64.
+Between both models, a linear Support Vector Machine has an overall macro-average F1 score of 0.62 compared with a Random Forest classifier which has a score of 0.5, indicating it may perform better overall across all classes.
+Additionally, the overall accuracy between the SVM and Random Forest classifiers are 0.83 and 0.75 respectively. This suggests that SVM will accurately predict positive classes as positive and negative classes as negative. 
 
-Ridge Classification shows relatively strong precision and recall when classifying Conservative and Labour speeches. As both precision and recall is high when classifying Labour and Conservative speeches, this suggests there are few false positives (i.e. if a model makes a prediction, there is a high probability the prediction is correct) and there are few false negatives (i.e. there is a high chance the model will detect it).
-Additionally Ridge Classification shows relatively strong precision when classifying Liberal Democrat and Scottish National Party speeches. However it is worth noting that recall for Ridge Classification is comparable to SVM and Random Forest classification. As precision is high with lower recall, this suggests that the model may miss positive outcomes although when an outcome is classed as positive, it is highly likely it is positive (i.e. fthere are few false positives but a higher proportion of false negatives).
+When classifying Conservative speeches, SVM shows higher precision which suggests that the model is more likely to correctly predict Conservative speeches. (i.e. the model has fewer false positives so therefore makes fewer mistakes when predicting positive cases)
+However as Random Forest has a marginally higher recall score, this suggests that the model may identify more Conservative speeches (i.e. the model has fewer false negative so therefore captures a large portion of positive cases)
 
-Ridge Classification performs the best, closely followed with SVM - especially as the macro-average F1 score is the highest amongst all models.
+SVM shows a higher precision and recall score when classifying Labour and Scottish National Party speeches. This suggests that the model is more likely to identify Labour and Scottish National Party speeches but also more likely to correctly classify speeches within the class. 
+
+Both models appear to struggle classifying Liberal Democrat speeches. Although the SVM model has a perfect precision score of 1, the recall score is 0.06 which suggests that all predictions for Liberal Democrat speeches are correct (i.e. no false positives),
+however the model struggles to identify speeches as Liberal Democrat (only identifying 6%). Similiarly with Random Forest, the precision score is 0.67 and the recall score is 0.04, highlighting poor performance when identifying Liberal Democrat speeches.
+
+Based on evaluation, it can be noted that SVM performs better overall compared with Random Forest classification. 
