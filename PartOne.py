@@ -41,7 +41,7 @@ def read_novels(path : str):
     df = df.sort_values(by='year', ignore_index=True)
     return df
 
-path = Path.cwd()/"syntax-style/novels"
+path = Path.cwd()/"p1-texts/novels"
 df = read_novels(path)
 # print(df.head())
 
@@ -65,7 +65,7 @@ def count_syl(word, d):
         return len(syllables)
     
 # print(count_syl('Hello', d))
-# print(count_syl('Love', d))
+# print(count_syl('Python', d))
 
 def fk_level(text, d):
     """Returns the Flesch-Kincaid Grade Level of a text (higher grade is more difficult).
@@ -93,7 +93,7 @@ def fk_level(text, d):
 # print(fk_level('', d))
     
 
-def parse(df, store_path=Path.cwd() / "syntax-style" / "novels" / "parsed", out_name="parsed.pickle"):
+def parse(df, store_path=Path.cwd() / "pickles", out_name="parsed.pickle"):
     """Parses the text of a DataFrame using spaCy, stores the parsed docs as a column and writes 
     the resulting  DataFrame to a pickle file
     Args:
@@ -239,7 +239,7 @@ if __name__ == "__main__":
     """
     uncomment the following lines to run the functions once you have completed them
     """
-    path = Path.cwd() / "syntax-style" / "novels"
+    path = Path.cwd() / "p1-texts" / "novels"
     print(path)
     df = read_novels(path) # this line will fail until you have completed the read_novels function above.
     print(df.head())
@@ -248,7 +248,7 @@ if __name__ == "__main__":
     print(df.head())
     print(get_ttrs(df))
     print(get_fks(df))
-    df = pd.read_pickle(Path.cwd() / "syntax-style" / "novels" / "parsed" / "parsed.pickle")
+    df = pd.read_pickle(Path.cwd() / "pickles" /"parsed.pickle")
     print(get_subjects(df))
      
     for i, row in df.iterrows():
