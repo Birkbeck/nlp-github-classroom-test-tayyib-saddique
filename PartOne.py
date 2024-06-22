@@ -84,7 +84,7 @@ def fk_level(text, d):
     syllable_count = sum(count_syl(w, d) for w in word)
 
     if word_count == 0 or sentence_count == 0:
-        return 0.00
+        return 0.00 # if text has no sentences or words, then assume flesch-kincaid grade is 0
     else:
         fk_grade_level = 0.39 * (word_count / sentence_count) + 11.8 * (syllable_count / word_count) - 15.59
         return fk_grade_level
@@ -104,10 +104,7 @@ def parse(df, store_path=Path.cwd() / "pickles", out_name="parsed.pickle"):
     Returns:
         df: pandas DataFrame
     """
-    nlp = spacy.load("en_core_web_sm")
-
     store_path.mkdir(parents=True, exist_ok = True)
-    nlp.max_length = 1200000
     
     parsed_texts = []
     for index, row in df.iterrows():
