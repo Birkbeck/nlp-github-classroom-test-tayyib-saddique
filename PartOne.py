@@ -165,6 +165,8 @@ def subjects_by_verb_pmi(doc, target_verb):
     Args:
         doc (str): text data
         target_verb (str): verb
+    Returns:
+        pmi_subjects ()
     """
     
     subjects = []
@@ -186,12 +188,13 @@ def subjects_by_verb_pmi(doc, target_verb):
 
     return sorted(pmi_subjects, key=(lambda x: x[1]), reverse=True)
 
-
 def subjects_by_verb_count(doc, verb):
     """Extracts the most common subjects of a given verb in a parsed document. Returns a list of tuples.
     Args:
         doc (str): text data
         target_verb (str): verb
+    Returns:
+        list of tuples: list of tuples where each tuple contains subject and corresponding PMI value, sorted in descending order. 
     """
     subjects = []
 
@@ -208,6 +211,8 @@ def subject_counts(doc):
     """Extracts the most common subjects in a parsed document. Returns a list of tuples.
     Args:
         doc (str): text data
+    Returns:
+        list of tuples: list of tuples where each tuple contains subject and its frequency, sorted in descending order 
     """
     subjects = []
 
